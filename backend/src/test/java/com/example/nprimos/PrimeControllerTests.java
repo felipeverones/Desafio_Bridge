@@ -1,7 +1,6 @@
 package com.example.nprimos;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.matchesPattern;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,43 +24,50 @@ public class PrimeControllerTests {
     public void testPrimeCount() throws Exception {
         mockMvc.perform(get("/primes?k=10"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(matchesPattern("Números primos menores que 10: 4. Calculado em \\d+ms")));
-
+                .andExpect(jsonPath("$.data.upperLimit").value(10))
+                .andExpect(jsonPath("$.data.countPrimes").value(4))
+                .andExpect(jsonPath("$.data.message").value("Números primos menores que 10: 4."))
+                .andExpect(jsonPath("$.message").value("Consulta realizada com sucesso!"));
     }
 
     @Test
     public void testNonNumericInput() throws Exception {
         mockMvc.perform(get("/primes?k=abc"))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(containsString("Erro de tipo: Esperava-se um número inteiro. Por favor, verifique o valor informado e tente novamente com um número válido.")));
+                .andExpect(jsonPath("$.message").value("Erro de Tipo"))
+                .andExpect(jsonPath("$.data").value("Erro de tipo: Esperava-se um número inteiro. Por favor, verifique o valor informado e tente novamente com um número válido."));
     }
 
     @Test
     public void testHighLoadPerformance() throws Exception {
         mockMvc.perform(get("/primes?k=999999"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(matchesPattern("Números primos menores que 999999: \\d+. Calculado em \\d+ms")));
+                .andExpect(jsonPath("$.data.countPrimes").isNumber())
+                .andExpect(jsonPath("$.message").value("Consulta realizada com sucesso!"));
     }
 
     @Test
     public void testForceErrorEndpoint() throws Exception {
         mockMvc.perform(get("/force-error"))
                 .andExpect(status().isInternalServerError()) // Verifica se o status é 500
-                .andExpect(content().string(containsString("Ocorreu um erro inesperado: Erro forçado para teste"))); // Verifica a mensagem de erro
+                .andExpect(jsonPath("$.message").value("Erro Interno do Servidor"))
+                .andExpect(jsonPath("$.data").value("Ocorreu um erro inesperado: Erro forçado para teste"));
     }
 
     @Test
     public void testPrimeCountBelowMinimum() throws Exception {
         mockMvc.perform(get("/primes?k=1"))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(containsString("O número informado deve ser maior ou igual a 2.")));
+                .andExpect(jsonPath("$.message").value("Erro de Validação"))
+                .andExpect(jsonPath("$.data").value("O número informado deve ser maior ou igual a 2."));
     }
 
     @Test
     public void testPrimeCountAboveMaximum() throws Exception {
         mockMvc.perform(get("/primes?k=1000001"))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(containsString("O número informado deve ser menor ou igual a 1000000.")));
+                .andExpect(jsonPath("$.message").value("Erro de Validação"))
+                .andExpect(jsonPath("$.data").value("O número informado deve ser menor ou igual a 1000000."));
     }
 
 
@@ -72,9 +78,10 @@ public class PrimeControllerTests {
         mockMvc.perform(get("/primes?k=20")).andReturn(); // terceiro input com k=20
         mockMvc.perform(get("/history"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2)) // precisa ser 2 pela prevenção de duplicatas
-                .andExpect(jsonPath("$[0]", containsString("Números primos menores que 10: 4.")))
-                .andExpect(jsonPath("$[1]", containsString("Números primos menores que 20: 8.")));
+                .andExpect(jsonPath("$.data", hasSize(2)))
+                .andExpect(jsonPath("$.message").value("Histórico recuperado com sucesso!"))
+                .andExpect(jsonPath("$.data[0].message").value("Números primos menores que 10: 4."))
+                .andExpect(jsonPath("$.data[1].message").value("Números primos menores que 20: 8."));
     }
 
 
