@@ -9,7 +9,7 @@ RUN mvn clean install
 
 FROM openjdk:17-jdk-slim
 
-EXPOSE 8080
+EXPOSE $PORT
 
 COPY --from=build /target/nprimos-0.0.1-SNAPSHOT.jar app.jar
 
