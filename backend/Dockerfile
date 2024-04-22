@@ -1,23 +1,16 @@
-# Use uma imagem base com Java e Maven já instalados
-FROM maven:3.8.4-openjdk-17 AS build
+FROM ubuntu:latest AS build
 
-# Defina o diretório de trabalho dentro do container
-WORKDIR /app
-
-# Copie o código fonte da aplicação para o container
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -y
 COPY . .
 
-# Compile e empacote a aplicação usando Maven
+RUN apt-get install maven -y
 RUN mvn clean install
 
-# Segunda fase da construção para criar uma imagem mais leve
 FROM openjdk:17-jdk-slim
 
-# Exponha a porta que a aplicação utiliza
 EXPOSE 8080
 
-# Copie o arquivo JAR gerado na primeira fase para a segunda fase
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /target/nprimos-0.0.1-SNAPSHOT.jar app.jar
 
-# Comando para executar a aplicação
 ENTRYPOINT ["java", "-jar", "app.jar"]
