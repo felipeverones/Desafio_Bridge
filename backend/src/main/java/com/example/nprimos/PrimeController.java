@@ -23,6 +23,12 @@ public class PrimeController {
 
     private final Set<PrimeResponse> history = new LinkedHashSet<>();
 
+    @GetMapping("/")
+    public ResponseEntity<ApiResponse<String>> healthCheck(){
+        ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK, "Servidor Backend rodando!", null);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/primes")
     public ResponseEntity<ApiResponse<PrimeResponse>> countPrimes(@RequestParam @Min(value=2, message = "O número informado deve ser maior ou igual a 2.") @Max( value = 1000000, message = "O número informado deve ser menor ou igual a 1000000.") int k) {
         long startTime = System.currentTimeMillis();
