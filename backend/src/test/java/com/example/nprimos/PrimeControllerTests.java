@@ -1,6 +1,7 @@
 package com.example.nprimos;
 
 import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,6 +20,14 @@ public class PrimeControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @Test
+    public void testHealthCheck() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("Servidor Backend rodando!"))
+                .andExpect(jsonPath("$.data").isEmpty());
+    }
 
     @Test
     public void testPrimeCount() throws Exception {
@@ -82,6 +91,27 @@ public class PrimeControllerTests {
                 .andExpect(jsonPath("$.message").value("Histórico recuperado com sucesso!"))
                 .andExpect(jsonPath("$.data[0].message").value("Números primos menores que 10: 4."))
                 .andExpect(jsonPath("$.data[1].message").value("Números primos menores que 20: 8."));
+    }
+
+    @Test
+    public void testClearHistory() throws Exception {
+        // adiciona valores ao histórico primeiro
+        mockMvc.perform(get("/primes?k=10"))
+                .andExpect(status().isOk());
+        // verifica se o histórico não está vazio
+        mockMvc.perform(get("/history"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", hasSize(greaterThan(0))));
+        // limpa o histórico
+        mockMvc.perform(delete("/history"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("Histórico limpo com sucesso!"))
+                .andExpect(jsonPath("$.data").isEmpty());
+        //verifica se está limpo mesmo
+        mockMvc.perform(get("/history"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", hasSize(0)));
     }
 
 

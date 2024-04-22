@@ -46,6 +46,13 @@ public class PrimeController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @DeleteMapping("/history")
+    public ResponseEntity<ApiResponse<String>> clearHistory(){
+        history.clear();
+        ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK, "Histórico limpo com sucesso!", null);
+        return ResponseEntity.ok(response);
+    }
+
     private int countPrimesLessThan(int k) {
         int count = 0;
         for (int i = 2; i < k; i++) {
@@ -92,6 +99,8 @@ public class PrimeController {
     public ResponseEntity<Object> forceError() {
         throw new RuntimeException("Erro forçado para teste");
     }
+
+
 }
 
 
