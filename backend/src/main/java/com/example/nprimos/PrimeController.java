@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @Validated // pra habilitar validação
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PrimeController {
 
     private final Set<PrimeResponse> history = new LinkedHashSet<>();
