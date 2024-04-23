@@ -1,0 +1,1 @@
+export const ToastsBG = "#1b1c23";
