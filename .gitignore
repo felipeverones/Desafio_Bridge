@@ -1,3 +1,4 @@
+#Backend
 # Java/Maven
 backend/target/
 backend/.mvn/wrapper/maven-wrapper.jar
@@ -34,3 +35,30 @@ backend/build/
 
 # VS Code
 .vscode/
+
+
+#Frontend
+# Logs
+frontend/nprimos-front/logs
+frontend/nprimos-front/*.log
+frontend/nprimos-front/npm-debug.log*
+frontend/nprimos-front/yarn-debug.log*
+frontend/nprimos-front/yarn-error.log*
+frontend/nprimos-front/pnpm-debug.log*
+frontend/nprimos-front/lerna-debug.log*
+
+frontend/nprimos-front/node_modules
+frontend/nprimos-front/dist
+frontend/nprimos-front/dist-ssr
+frontend/nprimos-front/*.local
+
+# Editor directories and files
+frontend/nprimos-front/.vscode/*
+!frontend/nprimos-front/.vscode/extensions.json
+frontend/nprimos-front/.idea
+frontend/nprimos-front/.DS_Store
+frontend/nprimos-front/*.suo
+frontend/nprimos-front/*.ntvs*
+frontend/nprimos-front/*.njsproj
+frontend/nprimos-front/*.sln
+frontend/nprimos-front/*.sw?
