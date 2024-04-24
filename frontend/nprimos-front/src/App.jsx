@@ -64,11 +64,19 @@ function App() {
         },
       });
     } catch (error) {
-      toast.error(`${error.response.data.data}`, {
-        style: {
-          backgroundColor: ToastsBG,
-        },
-      });
+      if (!error.response) {
+        toast.error("Não foi possível conectar ao servidor. Por favor, tente novamente mais tarde.", {
+          style: {
+            backgroundColor: ToastsBG,
+          },
+        });
+      } else {
+        toast.error(`${error.response.data.data}`, {
+          style: {
+            backgroundColor: ToastsBG,
+          },
+        });
+      }
     } finally {
       setIsLoading(false);
       setInputValue("");
@@ -94,11 +102,20 @@ function App() {
         },
       });
     } catch (error) {
-      toast.error("Falha ao carregar o histórico.", {
-        style: {
-          backgroundColor: ToastsBG,
-        },
-      });
+      if (!error.response) {
+        toast.error("Não foi possível conectar ao servidor. Verifique sua conexão ou tente novamente mais tarde.", {
+          style: {
+            backgroundColor: ToastsBG,
+          },
+        });
+      } else {
+        toast.error(`${error.response.data.message || "Falha ao carregar o histórico."}`, {
+          style: {
+            backgroundColor: ToastsBG,
+          },
+        });
+      }
+    } finally {
       setIsHistoryLoading(false);
     }
   };
