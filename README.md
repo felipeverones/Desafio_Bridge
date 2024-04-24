@@ -12,6 +12,8 @@ O projeto `Contador de Números Primos` é uma aplicação web full-stack projet
 - [Uso](#uso)
 - [Deploy](#deploy)
 - [Recursos](#recursos)
+- [Testes Unitários](#testes-unitários)
+- [Requisitos Bônus e Validações](#requisitos-bônus-e-validações)
 - [Dependências](#dependências)
 - [Exemplos](#exemplos)
 
@@ -158,6 +160,52 @@ Esses links direcionam para as versões em produção da aplicação, onde todas
 - Design responsivo adequado para vários dispositivos.
 - Validação em tempo real da entrada para garantir que apenas inteiros sejam aceitos.
 - Exibição dos resultados do cálculo dos primos e do tempo de processamento.
+
+## Testes Unitários
+
+### Backend
+
+O backend utiliza o Spring Boot Test para facilitar os testes unitários e de integração. Os testes ajudam a garantir que as funcionalidades atendem aos requisitos especificados e funcionam como esperado.
+
+#### Executando os Testes
+
+Para executar os testes no backend, navegue até o diretório do backend e use o seguinte comando Maven:
+
+```bash
+mvn test
+```
+
+## Requisitos Bônus e Validações
+
+### Histórico de Números
+
+A aplicação armazena e apresenta o histórico dos números informados pelo usuário, juntamente com seus respectivos resultados. Isso permite aos usuários visualizar o histórico de suas consultas, facilitando a comparação de resultados e a análise de tendências ao longo do tempo.
+
+### Validações
+
+O sistema inclui várias validações para garantir que a aplicação opere de forma robusta e sem erros:
+
+- **Validação de Entrada**: A aplicação aceita somente números inteiros positivos, rejeitando quaisquer outros tipos de entrada que poderiam causar erros no cálculo.
+- **Limites de Entrada**: Foi definido, para o valor de `k`, limite inferior de até `2` e um limite superior de até `1000000` para evitar sobrecarga no cálculo dos números primos e garantir que a resposta seja gerada em um tempo razoável.
+
+### Deploy em Cloud
+
+O projeto foi publicado em provedores de cloud para fácil acesso e avaliação:
+
+- **Backend**: Hospedado na [Railway](https://nprimos-production.up.railway.app/)
+- **Frontend**: Hospedado na [Vercel](https://nprimos-bridge.vercel.app/)
+
+Esses deploys demonstram a capacidade da aplicação de operar em um ambiente de produção real e sua escalabilidade.
+
+### Testes Unitários
+
+Foram realizados testes unitários no backend que todas as funções principais da API funcionem corretamente. Esses testes ajudam a detectar bugs precocemente no ciclo de desenvolvimento e garantem que as atualizações recentes não afetem as funcionalidades existentes.
+
+Testes implementados com JUnit e Spring Boot Test.
+
+
+Para executar os testes unitários, você pode seguir os comandos listados na seção [Testes Unitários](#testes-unitários).
+
 
 ## Dependências
 
